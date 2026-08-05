@@ -15,12 +15,12 @@ import java.util.List;
  * Talks to Gemini over plain HTTP. Intentionally NO abstractions — students
  * should be able to read this top-to-bottom and see exactly what goes on the wire.
  *
- *   Endpoint: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=...
+ *   Endpoint: POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key=...
  */
 public class GeminiClient {
 
     private static final String URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent";
 
     private final HttpClient http = HttpClient.newHttpClient();
     private final ObjectMapper json = new ObjectMapper();
@@ -43,9 +43,13 @@ public class GeminiClient {
     public static class ToolCall {
         public final String name;
         public final JsonNode args;
-        public ToolCall(String name, JsonNode args) {
+        // Gemini 3.x requires this to be echoed back on the functionCall part
+        // in the next request, or the API rejects the turn with a 400.
+        public final String thoughtSignature;
+        public ToolCall(String name, JsonNode args, String thoughtSignature) {
             this.name = name;
             this.args = args;
+            this.thoughtSignature = thoughtSignature;
         }
     }
 
@@ -79,10 +83,11 @@ public class GeminiClient {
     // ─────────────────────────────────────────────────────────────────────
     public Reply chatWithTools(GeminiRequest request) throws Exception {
         GeminiResponse response = post(request);
-        Part.FunctionCall fc = response.functionCall();
-        
-        if (fc != null) {
-            return new Reply(null, new ToolCall(fc.name, fc.args));
+        Part part = response.firstPart();
+
+        if (part != null && part.functionCall != null) {
+            return new Reply(null, new ToolCall(
+                    part.functionCall.name, part.functionCall.args, part.thoughtSignature));
         }
         return new Reply(response.text(), null);
     }

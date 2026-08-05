@@ -27,9 +27,11 @@ public class Part {
         return p;
     }
 
+    // Gemini 3.x returns thoughtSignature as a sibling of functionCall on the
+    // part, and rejects follow-up turns (400) unless it is echoed back there.
     public static Part ofFunctionCall(String name, JsonNode args, String thoughtSignature) {
-        Part p = new Part(null);
-        p.functionCall = new FunctionCall(name, args, thoughtSignature);
+        Part p = ofFunctionCall(name, args);
+        p.thoughtSignature = thoughtSignature;
         return p;
     }
 
@@ -46,19 +48,12 @@ public class Part {
     public static class FunctionCall {
         public String name;
         public JsonNode args;
-        public String thoughtSignature; // added for thought signature
 
         public FunctionCall() {}
 
         public FunctionCall(String name, JsonNode args) {
             this.name = name;
             this.args = args;
-        }
-
-        public FunctionCall(String name, JsonNode args, String thoughtSignature) {
-            this.name = name;
-            this.args = args;
-            this.thoughtSignature = thoughtSignature;
         }
     }
 
