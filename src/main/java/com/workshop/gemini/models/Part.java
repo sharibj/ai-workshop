@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Part {
@@ -12,6 +13,7 @@ public class Part {
     public FunctionCall functionCall;
     public FunctionResponse functionResponse;
     public InlineData inlineData;
+    public String thoughtSignature;
 
     public Part() {}
 
@@ -25,17 +27,26 @@ public class Part {
         return p;
     }
 
+    public static Part ofFunctionCall(String name, JsonNode args, String thoughtSignature) {
+        Part p = new Part(null);
+        p.functionCall = new FunctionCall(name, args, thoughtSignature);
+        return p;
+    }
+
     public static Part ofFunctionResponse(String name, String result) {
         Part p = new Part(null);
         p.functionResponse = new FunctionResponse(name, result);
         return p;
     }
 
+
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class FunctionCall {
         public String name;
         public JsonNode args;
+        public String thoughtSignature; // added for thought signature
 
         public FunctionCall() {}
 
@@ -43,12 +54,21 @@ public class Part {
             this.name = name;
             this.args = args;
         }
+
+        public FunctionCall(String name, JsonNode args, String thoughtSignature) {
+            this.name = name;
+            this.args = args;
+            this.thoughtSignature = thoughtSignature;
+        }
     }
+
+    
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class FunctionResponse {
         public String name;
         public FunctionResponseBody response;
+        
 
         public FunctionResponse() {}
 

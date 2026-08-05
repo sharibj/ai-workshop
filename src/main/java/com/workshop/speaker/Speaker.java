@@ -52,7 +52,7 @@ public class Speaker {
 		speak(name, Source.CODE);
 	}
 	
-	
+	// passes the name so it saves it on the speaker
 	public void speak(String name, Source source) {
 		printBanner(name, source);
 		if (useRealTts) {
@@ -65,7 +65,6 @@ public class Speaker {
 			}
 		}
 	}
-	
 	
 	private void printBanner(String name, Source source) {
 		String c = source.color;

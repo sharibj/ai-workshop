@@ -20,7 +20,7 @@ import java.util.List;
 public class GeminiClient {
 
     private static final String URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent";
 
     private final HttpClient http = HttpClient.newHttpClient();
     private final ObjectMapper json = new ObjectMapper();
