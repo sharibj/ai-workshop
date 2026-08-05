@@ -18,7 +18,6 @@ import com.workshop.tools.ToolRegistry;
 
 import static com.workshop.constants.Prompts.SAY_MY_NAME_SYSTEM_PROMPT;
 import static com.workshop.constants.Prompts.SAY_MY_NAME_WITH_TOOLS_SYSTEM_PROMPT;
-//import static com.workshop.constants.Prompts.SAY_MY_NAME_WITH_SPEAK_TOOL_SYSTEM_PROMPT;
 
 /**
  * AgentApp — the only entry point.
@@ -79,7 +78,7 @@ public class AgentApp {
 	 *
 	 */
 	private static void processUserInput(String userInput) throws Exception {
-		step5(userInput);
+		step1(userInput);
 	}
 	
 	

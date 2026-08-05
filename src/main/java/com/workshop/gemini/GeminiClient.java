@@ -15,7 +15,7 @@ import java.util.List;
  * Talks to Gemini over plain HTTP. Intentionally NO abstractions — students
  * should be able to read this top-to-bottom and see exactly what goes on the wire.
  *
- *   Endpoint: POST https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key=...
+ *   Endpoint: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=...
  */
 public class GeminiClient {
 

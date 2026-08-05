@@ -52,7 +52,7 @@ public class Speaker {
 		speak(name, Source.CODE);
 	}
 	
-	// passes the name so it saves it on the speaker
+	// source only controls how the banner is labelled (direct code call vs model tool call)
 	public void speak(String name, Source source) {
 		printBanner(name, source);
 		if (useRealTts) {
