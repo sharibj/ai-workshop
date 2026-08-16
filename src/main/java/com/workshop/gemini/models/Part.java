@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
 
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Part {
@@ -12,6 +13,7 @@ public class Part {
     public FunctionCall functionCall;
     public FunctionResponse functionResponse;
     public InlineData inlineData;
+    public String thoughtSignature;
 
     public Part() {}
 
@@ -25,11 +27,21 @@ public class Part {
         return p;
     }
 
+    // Gemini 3.x returns thoughtSignature as a sibling of functionCall on the
+    // part, and rejects follow-up turns (400) unless it is echoed back there.
+    public static Part ofFunctionCall(String name, JsonNode args, String thoughtSignature) {
+        Part p = ofFunctionCall(name, args);
+        p.thoughtSignature = thoughtSignature;
+        return p;
+    }
+
     public static Part ofFunctionResponse(String name, String result) {
         Part p = new Part(null);
         p.functionResponse = new FunctionResponse(name, result);
         return p;
     }
+
+
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -45,10 +57,13 @@ public class Part {
         }
     }
 
+    
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class FunctionResponse {
         public String name;
         public FunctionResponseBody response;
+        
 
         public FunctionResponse() {}
 

@@ -108,7 +108,8 @@ public class AgentApp {
 				// record the tool call in history so the model sees it next turn
 //				System.out.println("  ↳ 🤖 tool call:   " + reply.toolCall.name + " " + reply.toolCall.args);
 				history.add(new Content(Role.MODEL,
-						List.of(Part.ofFunctionCall(reply.toolCall.name, reply.toolCall.args))));
+						List.of(Part.ofFunctionCall(reply.toolCall.name, reply.toolCall.args,
+								reply.toolCall.thoughtSignature))));
 				String result = tools.execute(reply.toolCall.name, reply.toolCall.args);
 				// record the tool result so the model knows what happened
 //				System.out.println("  ↳ 📦 tool result: " + result);
